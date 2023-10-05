@@ -1,0 +1,63 @@
+server:
+  port: 8083
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: "always"
+  endpoints:
+    web:
+      exposure:
+        include: health,info,loggers
+      base-path: /
+
+
+logging:
+  level:
+    com.app: DEBUG
+    org.apache: INFO
+    com.kafka: WARN
+    org.springframework: INFO
+
+msg:
+  retry:
+    count: 2
+
+
+aws:
+  access-key: AKIAWD5GL2KAX2LI36BJ
+  secret-key: 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
+  region: us-east-1
+
+kafka:
+  main:
+    bootstrapAddress: localhost:9092
+    groupId: adas-datasream-group
+    topic: adas-main1
+    auto.offset.reset: latest
+    offset:
+    maxPollRecords: 1000
+    maxPollIntervalMs: 600000
+    concurrency: 16
+    subconsumers: 8
+    partitionAssignmentStrategies: org.apache.kafka.clients.consumer.RangeAssignor
+    rebalanceMaxDelayMs: 300000
+  retry:
+    bootstrapAddress: localhost:9092
+    groupId: adas-datasream-retry-group
+    topic: adas-retry
+    auto.offset.reset: latest
+    offset:
+    maxPollRecords: 125
+    concurrency: 8
+  letter:
+    topic: adas-letter-topic
+
+  producer:
+    bootstrapAddress: localhost:9092
+    retries: 1
+    batch.size: 4096
+    linger: 1
+    buffer.memory: 40960
+    acks: 1
